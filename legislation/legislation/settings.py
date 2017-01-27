@@ -38,9 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'legislation_models',
-    'frontend',
-    'data_processing',
-    'crawlers'
+    'frontend'
 ]
 
 MIDDLEWARE = [
