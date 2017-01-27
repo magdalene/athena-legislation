@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('line', models.TextField()),
                 ('date', models.DateField()),
-                ('bill', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Bill')),
+                ('bill', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Bill')),
             ],
             options={
                 'db_table': 'bill_history_line',
@@ -77,7 +77,7 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(max_length=256)),
                 ('district', models.CharField(max_length=256)),
                 ('link', models.CharField(max_length=1024)),
-                ('legislative_body', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.LegislativeBody')),
+                ('legislative_body', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.LegislativeBody')),
             ],
             options={
                 'db_table': 'legislator',
@@ -113,8 +113,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name_string', models.CharField(max_length=256)),
                 ('sponsor_type', models.CharField(choices=[('SP', 'Sponsor'), ('CO', 'Co-sponsor')], max_length=2)),
-                ('bill', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Bill')),
-                ('legislator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Legislator')),
+                ('bill', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Bill')),
+                ('legislator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Legislator')),
             ],
             options={
                 'db_table': 'sponsor',
@@ -124,7 +124,7 @@ class Migration(migrations.Migration):
             name='State',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('place', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Place')),
+                ('place', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Place')),
             ],
             options={
                 'db_table': 'state',
@@ -133,36 +133,36 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='meeting',
             name='place',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Place'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Place'),
         ),
         migrations.AddField(
             model_name='legislativebody',
             name='place',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Place'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Place'),
         ),
         migrations.AddField(
             model_name='city',
             name='place',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Place'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Place'),
         ),
         migrations.AddField(
             model_name='city',
             name='state',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.State'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.State'),
         ),
         migrations.AddField(
             model_name='bill',
             name='legislative_body',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.LegislativeBody'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.LegislativeBody'),
         ),
         migrations.AddField(
             model_name='agendaitem',
             name='bill',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Bill'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Bill'),
         ),
         migrations.AddField(
             model_name='agendaitem',
             name='meeting',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='models.Meeting'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Meeting'),
         ),
     ]

@@ -9,7 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models', '0002_auto_20170127_1145'),
+        ('legislation_models', '0002_auto_20170127_1145'),
     ]
 
     operations = [
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='agendaitem',
             name='bill',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='models.Bill'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='legislation_models.Bill'),
         ),
         migrations.AlterField(
             model_name='bill',

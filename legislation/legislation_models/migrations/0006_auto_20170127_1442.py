@@ -9,7 +9,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models', '0005_meeting_legislative_body'),
+        ('legislation_models', '0005_meeting_legislative_body'),
     ]
 
     operations = [

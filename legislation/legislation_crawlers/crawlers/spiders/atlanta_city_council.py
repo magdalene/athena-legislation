@@ -6,19 +6,22 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from dateutil.parser import parse as parsedate
 
-from models.models import *
-
+import os
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legislation.settings")
+django.setup()
+from legislation_models.models import *
 ATLANTA = Place.objects.get(name='Atlanta')
 ATLANTA_CITY_COUNCIL = LegislativeBody.objects.get(place=ATLANTA)
 
 
 class AlantaCityCouncilSpider(CrawlSpider):
     name = "atlanta"
-    allowed_domains = ["http://atlantacityga.iqm2.com/"]
+    allowed_domains = ["atlantacityga.iqm2.com"]
     start_urls = ['http://atlantacityga.iqm2.com/Citizens/Calendar.aspx']
     rules = (
-        Rule(LinkExtractor(allow=('.*Detail_LegiFile.*')), callback='parse_ordinance'),
-        Rule(LinkExtractor(allow='.*Detail_Meeting.*'), callback='parse_meeting')
+        Rule(LinkExtractor(allow=('.*Detail_LegiFile.*'), deny='.*Print=Yes.*'), callback='parse_ordinance'),
+        Rule(LinkExtractor(allow='.*Detail_Meeting.*', deny='.*Print=Yes.*'), callback='parse_meeting')
     )
 
     def parse_ordinance(self, response):
@@ -48,10 +51,15 @@ class AlantaCityCouncilSpider(CrawlSpider):
         ordinance_urls = []
         ordinance_links = response.css('#MeetingDetail tr .Title .Link')
         for ordinance_link in ordinance_links:
-            text = ordinance_link.xpath('./text()').extract()[0]
+            text_list = ordinance_link.xpath('./text()').extract()
+            if not len(text_list):
+                continue
+            link = urljoin(response.url, ordinance_link.xpath('./@href').extract()[0])
+            if 'Detail_Meeting' in link:
+                continue
+            text = text_list[0]
             number = text.split(':')[0].strip()
             summary = ':'.join([s for s in text.split(':')[1:]]).strip()
-            link = urljoin(response.url, ordinance_link.xpath('./@href').extract()[0])
             ordinance_urls.append(link)
             bill, created = Bill.objects.get_or_create(number=number, legislative_body=ATLANTA_CITY_COUNCIL)
             if created:
@@ -59,7 +67,5 @@ class AlantaCityCouncilSpider(CrawlSpider):
                 bill.link = link
                 bill.save()
             agenda_item, _ = AgendaItem.objects.get_or_create(meeting=meeting, bill=bill)
-        #for url in ordinance_urls:
-        #    yield scrapy.Request(url)
 
 
