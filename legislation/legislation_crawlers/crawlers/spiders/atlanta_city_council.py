@@ -20,8 +20,13 @@ class AlantaCityCouncilSpider(CrawlSpider):
     allowed_domains = ["atlantacityga.iqm2.com"]
     start_urls = ['http://atlantacityga.iqm2.com/Citizens/Calendar.aspx']
     rules = (
-        Rule(LinkExtractor(allow=('.*Detail_LegiFile.*'), deny='.*Print=Yes.*'), callback='parse_ordinance'),
-        Rule(LinkExtractor(allow='.*Detail_Meeting.*', deny='.*Print=Yes.*'), callback='parse_meeting')
+        # TODO: add motions?
+        Rule(LinkExtractor(allow='.*Detail_LegiFile.*',
+                           deny=['.*Print=Yes.*', '.*FileOpen.*', '.*Detail_Motion.*']),
+             callback='parse_ordinance'),
+        Rule(LinkExtractor(allow='.*Detail_Meeting.*',
+                           deny=['.*Print=Yes.*', '.*FileOpen.*', '.*Detail_Motion.*']),
+             callback='parse_meeting', follow=True)
     )
 
     def parse_ordinance(self, response):
@@ -48,6 +53,7 @@ class AlantaCityCouncilSpider(CrawlSpider):
         meeting, _ = Meeting.objects.get_or_create(
             legislative_body=ATLANTA_CITY_COUNCIL, date=parsedate(datestring), name=name)
         meeting.address = address
+        meeting.link = response.url
         ordinance_urls = []
         ordinance_links = response.css('#MeetingDetail tr .Title .Link')
         for ordinance_link in ordinance_links:
@@ -55,7 +61,7 @@ class AlantaCityCouncilSpider(CrawlSpider):
             if not len(text_list):
                 continue
             link = urljoin(response.url, ordinance_link.xpath('./@href').extract()[0])
-            if 'Detail_Meeting' in link:
+            if 'Detail_Meeting' in link or 'FileOpen' in link or 'Detail_Motion' in link:
                 continue
             text = text_list[0]
             number = text.split(':')[0].strip()
