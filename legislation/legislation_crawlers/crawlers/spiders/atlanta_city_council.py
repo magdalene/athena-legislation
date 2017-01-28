@@ -18,7 +18,8 @@ ATLANTA_CITY_COUNCIL = LegislativeBody.objects.get(place=ATLANTA)
 class AlantaCityCouncilSpider(CrawlSpider):
     name = "atlanta"
     allowed_domains = ["atlantacityga.iqm2.com"]
-    start_urls = ['http://atlantacityga.iqm2.com/Citizens/Calendar.aspx']
+    #start_urls = ['http://atlantacityga.iqm2.com/Citizens/Calendar.aspx']
+    start_urls = ['http://atlantacityga.iqm2.com/Citizens/Detail_Meeting.aspx?ID=1984']
     rules = (
         # TODO: add motions?
         Rule(LinkExtractor(allow='.*Detail_LegiFile.*',
@@ -34,7 +35,7 @@ class AlantaCityCouncilSpider(CrawlSpider):
         number = response.css('#ContentPlaceholder1_lblResNum')[0].xpath('text()').extract()[0]
         summary = response.css('#ContentPlaceholder1_lblLegiFileTitle')[0].xpath('text()').extract()[0]
         text_paragraphs = response.css('#divBody .LegiFileSectionContents p')
-        text_paragraph_texts = [' '.join(p.xpath('.//text()').extract()).strip() for p in text_paragraphs]
+        text_paragraph_texts = [''.join(p.xpath('.//text()').extract()).strip() for p in text_paragraphs]
         text = '\n\n'.join([p for p in text_paragraph_texts if len(p)])
         link = response.url
         # TODO: history
@@ -54,6 +55,7 @@ class AlantaCityCouncilSpider(CrawlSpider):
             legislative_body=ATLANTA_CITY_COUNCIL, date=parsedate(datestring), name=name)
         meeting.address = address
         meeting.link = response.url
+        meeting.save()
         ordinance_urls = []
         ordinance_links = response.css('#MeetingDetail tr .Title .Link')
         for ordinance_link in ordinance_links:
