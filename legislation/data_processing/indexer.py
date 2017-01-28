@@ -17,6 +17,7 @@ DOC_TYPE = 'bill'
 INDEX_MAPPING = {
     DOC_TYPE: {
         'properties': {
+            'id': {'type': 'integer'},
             'number': {'type': 'string', 'index': 'not_analyzed'},
             'legislative_body': {
                 'properties': {
@@ -83,6 +84,7 @@ def index_actions():
             '_index': INDEX_NAME,
             '_type': DOC_TYPE,
             '_source': {
+                'id': bill.id,
                 'number': bill.number,
                 'bill_type': bill.bill_type,
                 'title': bill.title,
