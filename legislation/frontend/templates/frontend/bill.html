@@ -31,7 +31,7 @@
     <table class="table">
         <tr>
             <td>Number</td><td><a target="_blank" href="{{ bill.link }}">{{ bill.number }}</a></td>
-        </tr><tr>    <td>Legislative Body</td><td>{{ bill.legislative_body.name }} ({{ bill.legislative_body.city }}, {{ bill.legislative_body.state }}</td>
+        </tr><tr>    <td>Legislative Body</td><td>{{ bill.legislative_body.name }} ({{ bill.legislative_body.city }}, {{ bill.legislative_body.state }})</td>
         </tr><tr>    <td>Sponsors</td><td>{% if bill.sponsors %}{% for sponsor in bill.sponsors %}
             {{ sponsor.name }} ({{ sponsor.sponsor_type }}, {{ sponsor.district }}),
             {% endfor %}{% endif %}</td>
