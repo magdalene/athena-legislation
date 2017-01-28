@@ -18,8 +18,8 @@ ATLANTA_CITY_COUNCIL = LegislativeBody.objects.get(place=ATLANTA)
 class AlantaCityCouncilSpider(CrawlSpider):
     name = "atlanta"
     allowed_domains = ["atlantacityga.iqm2.com"]
-    #start_urls = ['http://atlantacityga.iqm2.com/Citizens/Calendar.aspx']
-    start_urls = ['http://atlantacityga.iqm2.com/Citizens/Detail_Meeting.aspx?ID=1984']
+    start_urls = ['http://atlantacityga.iqm2.com/Citizens/Calendar.aspx']
+    #start_urls = ['http://atlantacityga.iqm2.com/Citizens/Detail_Meeting.aspx?ID=1984']
     rules = (
         # TODO: add motions?
         Rule(LinkExtractor(allow='.*Detail_LegiFile.*',
