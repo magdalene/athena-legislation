@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from frontend.views import search, home, bill
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    #url(r'^admin/', admin.site.urls),
+    url(r'^$', home, name='home'),
+    url(r'^search', search, name='search'),
+    url(r'^bill/(?P<bill_id>\d+)', bill, name='bill')
 ]

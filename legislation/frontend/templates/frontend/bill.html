@@ -1,0 +1,44 @@
+{% load static %}
+<!-- TODO: this is a temporary page, for checking data-->
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Athena</title>
+    <meta name="description" content="Legislation search and notification for activists">
+    <meta name="author" content="Darla Magdalene Shockley">
+    <link rel="stylesheet" href="{% static "frontend/bootstrap.min.css" %}"/>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+{% if bill %}
+
+    <table class="table">
+        <tr>
+            <td>Number</td><td><a target="_blank" href="{{ bill.link }}">{{ bill.number }}</a></td>
+        </tr><tr>    <td>Legislative Body</td><td>{{ bill.legislative_body.name }} ({{ bill.legislative_body.city }}, {{ bill.legislative_body.state }}</td>
+        </tr><tr>    <td>Sponsors</td><td>{% if bill.sponsors %}{% for sponsor in bill.sponsors %}
+            {{ sponsor.name }} ({{ sponsor.sponsor_type }}, {{ sponsor.district }}),
+            {% endfor %}{% endif %}</td>
+        </tr><tr>    <td>Bill Type</td><td>{{  bill.bill_type  }}</td>
+        </tr><tr>    <td>Meetings</td><td>{% if bill.meetings %}{% for meeting in bill.meetings %}
+            <a href="{{ meeting.link }}">{{ meeting.name }} ({{ meeting.time }} - {{ meeting.address }})</a>,
+        {% endfor %}{% endif %}</td>
+        </tr><tr>    <td>Title</td><td>{{ bill.title }}</td>
+        </tr><tr>    <td>Summary</td><td>{{ bill.summary }}</td>
+        </tr><tr>    <td>Text</td><td>{{ bill.text|safe }}</td>
+        </tr>
+
+    </table>
+
+{% endif %}
+
+</body>
+</html>
