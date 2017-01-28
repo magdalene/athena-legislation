@@ -18,7 +18,14 @@
 
 <body>
 
-<!-- TODO: show the search results -->
+<dl class="dl-horizontal">
+    {% for result in hits %}
+    <a href="/bill/{{ result.id }}">
+        <dt>{{ result.number }}</dt>
+        <dd>{{ result.summary }}</dd>
+    </a>
+    {% endfor %}
+</dl>
 
 </body>
 </html>

@@ -17,7 +17,20 @@
 </head>
 
 <body>
-<!--TODO: search form-->
-
+<div class="col-md-3">
+<form method="post" action="/search">{% csrf_token %}
+    <div class="form-group">
+        <label for="search-text"></label><input type="text" name="search" class="form-control" id="search-text">
+    </div>
+    <div class="form-group">
+        {% for bill_type in bill_types %}
+        <label for="bill-type-{{ bill_type }}"><input name="bill_type_{{ bill_type }}" type="checkbox" class="form-control" value="{{ bill_type }}" id="bill-type-{{ bill_type }}" checked>{{ bill_type }}</label>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+</form>
+</div>
 </body>
 </html>
