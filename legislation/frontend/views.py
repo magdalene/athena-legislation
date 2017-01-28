@@ -3,6 +3,8 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render
 
+from dateutil.parser import parse as parsedate
+
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
 
@@ -46,15 +48,24 @@ def search(request):
     if meeting_date_gt or meeting_date_lt:
         r = {}
         if meeting_date_gt:
-            r['gte'] = meeting_date_gt
+            r['gte'] = parsedate(meeting_date_gt)
         if meeting_date_lt:
-            r['lt'] = meeting_date_lt
-        s = s.filter('range', {'meetings.time': r})
+            r['lt'] = parsedate(meeting_date_lt)
+        s = s.filter('range', **{'meetings.time': r})
     print(s.to_dict())
     hits = [hit for hit in s[page * 10:(page+1)* 10].execute()]
+
+    query = query.copy()
+    if 'csrfmiddlewaretoken' in query:
+        del query['csrfmiddlewaretoken']
+
+    more_pages = s.count() > page * 10 + 10
+
     return render(request, 'frontend/search_results.html', {
         'hits': hits,
-        'query': query
+        'query': query.urlencode(),
+        'page': page,
+        'more_pages': more_pages
     })
 
 
