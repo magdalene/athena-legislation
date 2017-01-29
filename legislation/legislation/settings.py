@@ -12,6 +12,25 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
+CONF_FILE_PATH = '/etc/legislation/legislation.conf'
+
+config_params = {}
+
+if os.path.exists(CONF_FILE_PATH):
+    with open(CONF_FILE_PATH) as f:
+        lines = [line.split('=') for line in f.readlines() if len(line.strip()) and not line.strip().startswith('#')]
+        config_params = {key.strip().upper(): val.strip() for key, val in lines}
+
+DB_HOST = config_params.get('DB_HOST', 'localhost')
+DB_PORT = config_params.get('DB_PORT', '5432')
+DB_NAME = config_params.get('DB_NAME', 'legislation')
+DB_USER = config_params.get('DB_USER', 'shockley')
+DB_PASSWORD = config_params.get('DB_PASSWORD', '')
+ALLOWED_HOSTS = [host for host in config_params.get('ALLOWED_HOSTS', '').split(',') if len(host)]
+
+DEBUG = config_params.get('DEBUG', 'true').lower() == 'true'
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,12 +40,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '!=i11n)e#zvm3$%2&gv1*cj23mc0c*e46dl+or#e6!7p%x_3k5'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -147,11 +160,11 @@ WSGI_APPLICATION = 'legislation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'legislation',
-        'USER': 'shockley',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
     }
 }
 
