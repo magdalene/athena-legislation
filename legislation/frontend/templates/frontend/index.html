@@ -21,13 +21,14 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">Home</a>
+            <a class="navbar-brand" href="/legis/">Home</a>
         </div>
+        <div class="navbar-right"><a href="/accounts/logout">Logout</a></div>
     </div>
 </nav>
 
 <div class="col-lg-8 col-lg-offset-2">
-<form method="post" action="/search">{% csrf_token %}
+<form method="post" action="/legis/search">{% csrf_token %}
     <div class="form-group">
         <label for="search-text"></label><input placeholder="Search text..." type="text" name="search" class="form-control" id="search-text">
     </div>

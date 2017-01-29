@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -14,7 +15,7 @@ ES_CONNECTION = Elasticsearch([{'host': 'localhost', 'port': '9200'}])
 
 INDEX_PATTERN = 'bills'
 
-
+@login_required
 def search(request):
     if request.method == 'POST':
         query = request.POST
@@ -68,12 +69,12 @@ def search(request):
         'more_pages': more_pages
     })
 
-
+@login_required
 def home(request):
     bill_types = [bill.bill_type for bill in Bill.objects.distinct('bill_type')]
     return render(request, 'frontend/index.html', {'bill_types': bill_types})
 
-
+@login_required
 def bill(request, bill_id):
     s = Search(using=ES_CONNECTION, index=INDEX_PATTERN).query('match', id=bill_id)
     hits = [hit for hit in s[0:1].execute()]

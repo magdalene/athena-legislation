@@ -14,6 +14,15 @@
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
   <![endif]-->
+
+    <style>
+        .result {
+            padding-top: 20px;
+        }
+        .bottom-nav {
+            padding-top: 50px;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,8 +30,9 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">Home</a>
+            <a class="navbar-brand" href="/legis/">Home</a>
         </div>
+        <div class="navbar-right"><a href="/accounts/logout">Logout</a></div>
     </div>
 </nav>
 
@@ -31,19 +41,19 @@
         No results...
      {% endif %}
     {% for result in hits %}
-    <a href="/bill/{{ result.id }}">
-        <dt>{{ result.number }}</dt>
-        <dd>{{ result.summary }}</dd>
+    <a href="/legis/bill/{{ result.id }}">
+        <dt class="result">{{ result.number }}</dt>
+        <dd class="result">{{ result.summary }}</dd>
     </a>
     {% endfor %}
 </dl>
 
-<div class="col-lg-10 col-lg-offset-1">
+<div class="bottom-nav col-lg-10 col-lg-offset-1">
     {% if page != 0 %}
-        <a class="pull-left" href="/search?{{ query }}&page={{ page|add:"-1" }}">Prev</a>
+        <a class="pull-left" href="/legis/search?{{ query }}&page={{ page|add:"-1" }}">Prev</a>
     {% endif %}
     {% if more_pages %}
-        <a class="pull-right" href="/search?{{ query }}&page={{ page|add:1 }}">Next</a>
+        <a class="pull-right" href="/legis/search?{{ query }}&page={{ page|add:1 }}">Next</a>
     {% endif %}
 </div>
 
