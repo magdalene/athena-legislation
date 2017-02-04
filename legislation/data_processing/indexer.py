@@ -1,4 +1,7 @@
 import os
+from copy import deepcopy
+from datetime import datetime
+
 import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legislation.settings")
@@ -18,6 +21,7 @@ INDEX_MAPPING = {
     DOC_TYPE: {
         'properties': {
             'id': {'type': 'integer'},
+            'index_date': {'type': 'date'},
             'number': {'type': 'string', 'index': 'not_analyzed'},
             'legislative_body': {
                 'properties': {
@@ -79,37 +83,43 @@ def index_actions():
             state = city.state
         else:
             state = State.objects.get(place=bill.legislative_body.place)
+        doc = {
+            'id': bill.id,
+            'number': bill.number,
+            'bill_type': bill.bill_type if bill.bill_type else 'Other/Missing',
+            'title': bill.title,
+            'text': bill.text,
+            'summary': bill.summary,
+            'link': bill.link,
+            'legislative_body': {
+                'name': bill.legislative_body.name,
+                'city': city.place.name if city else None,
+                'state': state.place.name
+            },
+            'sponsors': [{
+                             'name': '%s %s' % (sponsor.legislator.first_name,
+                                                sponsor.legislator.last_name) if sponsor.legislator else sponsor.name_string,
+                             'district': sponsor.legislator.district if sponsor.legislator else None,
+                             'sponsor_type': sponsor.sponsor_type,
+                             'link': sponsor.legislator.link if sponsor.legislator else None
+                         } for sponsor in bill.sponsor_set.all()],
+            'meetings': [{
+                             'time': agenda_item.meeting.date,
+                             'address': agenda_item.meeting.address,
+                             'name': agenda_item.meeting.name,
+                             'link': agenda_item.meeting.link
+                         } for agenda_item in bill.agendaitem_set.all()]
+        }
+        upsert = deepcopy(doc)
+        upsert['index_date'] = datetime.now()
+
         yield {
+            '_op_type': 'update',
             '_id': bill.id,
             '_index': INDEX_NAME,
             '_type': DOC_TYPE,
-            '_source': {
-                'id': bill.id,
-                'number': bill.number,
-                'bill_type': bill.bill_type if bill.bill_type else 'Other/Missing',
-                'title': bill.title,
-                'text': bill.text,
-                'summary': bill.summary,
-                'link': bill.link,
-                'legislative_body': {
-                    'name': bill.legislative_body.name,
-                    'city': city.place.name if city else None,
-                    'state': state.place.name
-                },
-                'sponsors': [{
-                                 'name': '%s %s' % (sponsor.legislator.first_name,
-                                                    sponsor.legislator.last_name) if sponsor.legislator else sponsor.name_string,
-                                 'district': sponsor.legislator.district if sponsor.legislator else None,
-                                 'sponsor_type': sponsor.sponsor_type,
-                                 'link': sponsor.legislator.link if sponsor.legislator else None
-                             } for sponsor in bill.sponsor_set.all()],
-                'meetings': [{
-                                 'time': agenda_item.meeting.date,
-                                 'address': agenda_item.meeting.address,
-                                 'name': agenda_item.meeting.name,
-                                 'link': agenda_item.meeting.link
-                             } for agenda_item in bill.agendaitem_set.all()]
-            }
+            'doc': doc,
+            'upsert': upsert
         }
 
 
