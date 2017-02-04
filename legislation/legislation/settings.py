@@ -14,6 +14,8 @@ import os
 
 CONF_FILE_PATH = '/etc/legislation/legislation.conf'
 
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 config_params = {}
 
 if os.path.exists(CONF_FILE_PATH):
@@ -211,6 +213,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
+
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 STATIC_URL = '/static/'
 
