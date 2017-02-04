@@ -8,6 +8,7 @@ Django==1.10.4
 django-allauth==0.30.0
 elasticsearch==5.1.0
 elasticsearch-dsl==5.1.0
+gunicorn==19.6.0
 idna==2.1
 incremental==16.10.1
 lxml==3.7.0
