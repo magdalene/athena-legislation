@@ -72,7 +72,7 @@ def search(request):
 
 @login_required
 def home(request):
-    bill_types = [bill.bill_type for bill in Bill.objects.distinct('bill_type')]
+    bill_types = [bill.bill_type if bill.bill_type is not None else 'Other/Missing' for bill in Bill.objects.distinct('bill_type')]
     return render(request, 'frontend/index.html', {'bill_types': bill_types})
 
 @login_required
