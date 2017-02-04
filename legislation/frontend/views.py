@@ -80,5 +80,5 @@ def bill(request, bill_id):
     s = Search(using=ES_CONNECTION, index=INDEX_PATTERN).query('match', id=bill_id)
     hits = [hit for hit in s[0:1].execute()]
     hit = hits[0]
-    hit.text = '<p>%s</p>' % '</p><p>'.join(hit.text.split('\n\n'))
+    hit.text = '<p>%s</p>' % '</p><p>'.join(hit.text.split('\n\n') if hit.text else '')
     return render(request, 'frontend/bill.html', {'bill': hit})
