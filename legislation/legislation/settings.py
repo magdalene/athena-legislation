@@ -14,7 +14,7 @@ import os
 
 CONF_FILE_PATH = '/etc/legislation/legislation.conf'
 
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 config_params = {}
 
