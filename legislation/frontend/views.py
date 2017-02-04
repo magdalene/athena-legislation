@@ -7,7 +7,7 @@ from django.shortcuts import render
 from dateutil.parser import parse as parsedate
 
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search
+from elasticsearch_dsl import Search, Q
 
 from legislation_models.models import Bill
 
@@ -24,7 +24,6 @@ def search(request):
     print(query)
     page = int(query.get('page', 0))
     search_string = query.get('search')
-    bill_type = query.get('bill_type')
     city = query.get('city')
     state = query.get('state')
     sponsor_name = query.get('sponsor_name')
@@ -36,8 +35,10 @@ def search(request):
     if search_string:
         s = s.query('query_string', query=search_string, fields=['number', 'title', 'text', 'summary'])
     if bill_types:
-        for bill_type in bill_types:
-            s = s.filter('match', bill_type=bill_type)
+        bill_type_query = Q('match', bill_type=bill_types[0])
+        for bill_type in bill_types[1:]:
+            bill_type_query = bill_type_query | Q('match', bill_type=bill_type)
+        s = s.filter(bill_type_query)
     if city:
         s = s.filter('match', {'legislative_body.city': city})
     if state:
