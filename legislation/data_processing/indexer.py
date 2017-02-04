@@ -86,7 +86,7 @@ def index_actions():
             '_source': {
                 'id': bill.id,
                 'number': bill.number,
-                'bill_type': bill.bill_type,
+                'bill_type': bill.bill_type if bill.bill_type else 'Other/Missing',
                 'title': bill.title,
                 'text': bill.text,
                 'summary': bill.summary,
