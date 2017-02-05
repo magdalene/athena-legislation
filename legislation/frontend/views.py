@@ -64,8 +64,8 @@ def search(request):
         'query': query.urlencode(),
         'page': page,
         'more_pages': more_pages,
-        'start_index': page * 10,
-        'end_index': page * 10 + 9,
+        'start_index': page * 10 + 1,
+        'end_index': page * 10 + 10,
         'total': total
     })
 
