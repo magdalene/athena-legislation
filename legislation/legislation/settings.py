@@ -28,6 +28,9 @@ DB_PORT = config_params.get('DB_PORT', '5432')
 DB_NAME = config_params.get('DB_NAME', 'legislation')
 DB_USER = config_params.get('DB_USER', 'shockley')
 DB_PASSWORD = config_params.get('DB_PASSWORD', '')
+
+EMAIL_SERVER = config_params.get('EMAIL_SERVER', '192.168.99.1')
+
 ALLOWED_HOSTS = [host for host in config_params.get('ALLOWED_HOSTS', '').split(',') if len(host)]
 
 DEBUG = config_params.get('DEBUG', 'true').lower() == 'true'

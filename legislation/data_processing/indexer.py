@@ -85,7 +85,7 @@ def index_actions():
             state = State.objects.get(place=bill.legislative_body.place)
         doc = {
             'id': bill.id,
-            'modified_date': bill.modified_date,
+            'modified_date': datetime.now(),
             'number': bill.number,
             'bill_type': bill.bill_type if bill.bill_type else 'Other/Missing',
             'title': bill.title,

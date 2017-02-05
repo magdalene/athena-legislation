@@ -141,6 +141,7 @@ class Search(models.Model):
     notification = models.CharField(max_length=24,
                                     choices=NOTIFICATION_CHOICES,
                                     default=NOTIFICATION_NONE)
+    last_notify_date = models.DateTimeField(auto_now_add=True)
     notify_on_update = models.BooleanField(default=False, null=False)
     search_string = models.TextField(null=True)
     place = models.TextField(null=True)
