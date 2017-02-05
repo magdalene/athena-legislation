@@ -74,7 +74,7 @@ ES_CONNECTION = Elasticsearch([{'host': ES_HOST, 'port': ES_PORT}])
 
 # TODO: add query by modified date, on the relevant models
 def index_actions():
-    bills = Bill.objects.all()
+    bills = Bill.objects.filter(status=Bill.STATUS_UP_TO_DATE)
     for bill in bills:
         city = None
         cities = City.objects.filter(place=bill.legislative_body.place)
