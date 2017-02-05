@@ -18,17 +18,22 @@
 <body>
 {% include "frontend/top-navbar.html" %}
 
-<dl class="dl-horizontal">
-    {% if not hits %}
-        No results...
-     {% endif %}
-    {% for result in hits %}
-    <a href="/legis/bill/{{ result.id }}">
-        <dt class="result">{{ result.number }}</dt>
-        <dd class="result">{{ result.summary }}</dd>
-    </a>
-    {% endfor %}
-</dl>
+<div class="container">
+
+    <h3>Search Results ({{ start_index }}...{{ end_index }} / {{ total }})</h3>
+    <dl class="dl-horizontal">
+        {% if not hits %}
+            No results...
+         {% endif %}
+        {% for result in hits %}
+        <a href="/legis/bill/{{ result.id }}">
+            <dt class="result">{{ result.number }}</dt>
+            <dd class="result">{{ result.summary }}</dd>
+        </a>
+        {% endfor %}
+    </dl>
+
+</div>
 
 <div class="bottom-nav col-lg-10 col-lg-offset-1">
     {% if page != 0 %}

@@ -54,13 +54,19 @@ def search(request):
     if 'csrfmiddlewaretoken' in query:
         del query['csrfmiddlewaretoken']
 
-    more_pages = es_search.count() > page * 10 + 10
+
+    total = es_search.count()
+
+    more_pages = total > page * 10 + 10
 
     return render(request, 'frontend/search_results.html', {
         'hits': hits,
         'query': query.urlencode(),
         'page': page,
-        'more_pages': more_pages
+        'more_pages': more_pages,
+        'start_index': page * 10,
+        'end_index': page * 10 + 9,
+        'total': total
     })
 
 
