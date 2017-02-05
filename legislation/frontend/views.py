@@ -100,6 +100,7 @@ def save_search(request):
 def searches(request):
     searches = {str(search.id): search for search in Search.objects.filter(owner=request.user)}
     if request.method == 'POST':
+        notify_updates = []
         for key, value in request.POST.items():
             if key.startswith('notification-search'):
                 search = searches.get(key.replace('notification-search-', ''))
@@ -111,6 +112,15 @@ def searches(request):
                 search = searches.get(search_id)
                 search.delete()
                 del searches[search_id]
+            if key.startswith('notify-updates'):
+                notify_updates.append(key.replace('notify-updates-', ''))
+        for key, search in searches.items():
+            if key in notify_updates and not search.notify_on_update:
+                search.notify_on_update = True
+                search.save()
+            elif search.notify_on_update:
+                search.notify_on_update = False
+                search.save()
 
     return render(request, 'frontend/searches.html', {
         'searches': searches.values(),

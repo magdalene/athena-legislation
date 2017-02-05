@@ -27,6 +27,9 @@
             </select>
         </td>
         <td>
+            <input  {% if search.notify_on_update %}checked{% endif %} type="checkbox" name="notify-updates-{{ search.id }}" id="notify-updates"><label for="notify-updates">Notify on update</label>
+        </td>
+        <td>
             <input type="checkbox" name="delete-{{ search.id }}" id="delete"><label for="delete">Delete</label>
         </td>
     </tr>

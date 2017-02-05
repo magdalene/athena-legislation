@@ -22,6 +22,7 @@ INDEX_MAPPING = {
         'properties': {
             'id': {'type': 'integer'},
             'index_date': {'type': 'date'},
+            'modified_date': {'type': 'date'},
             'number': {'type': 'string', 'index': 'not_analyzed'},
             'legislative_body': {
                 'properties': {
@@ -72,7 +73,6 @@ INDEX_SETTINGS = {
 ES_CONNECTION = Elasticsearch([{'host': ES_HOST, 'port': ES_PORT}])
 
 
-# TODO: add query by modified date, on the relevant models
 def index_actions():
     bills = Bill.objects.filter(status=Bill.STATUS_UP_TO_DATE)
     for bill in bills:
@@ -85,6 +85,7 @@ def index_actions():
             state = State.objects.get(place=bill.legislative_body.place)
         doc = {
             'id': bill.id,
+            'modified_date': bill.modified_date,
             'number': bill.number,
             'bill_type': bill.bill_type if bill.bill_type else 'Other/Missing',
             'title': bill.title,
