@@ -7,9 +7,9 @@ from django.shortcuts import render
 from dateutil.parser import parse as parsedate
 
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search, Q
+from elasticsearch_dsl import Search as EsSearch
 
-from legislation_models.models import Bill
+from legislation_models.models import Bill, Search
 
 ES_CONNECTION = Elasticsearch([{'host': 'localhost', 'port': '9200'}])
 
@@ -30,38 +30,30 @@ def search(request):
     sponsor_district = query.get('sponsor_district')
     meeting_date_gt = query.get('meeting_date_gt')
     meeting_date_lt = query.get('meeting_date_lt')
-    bill_types = [query.get(key) for key in query.keys() if key.startswith('bill_type')]
-    s = Search(using=ES_CONNECTION, index=INDEX_PATTERN)
-    if search_string:
-        s = s.query('query_string', query=search_string, fields=['number', 'title', 'text', 'summary'])
-    if bill_types:
-        bill_type_query = Q('match', bill_type=bill_types[0])
-        for bill_type in bill_types[1:]:
-            bill_type_query = bill_type_query | Q('match', bill_type=bill_type)
-        s = s.filter(bill_type_query)
-    if city:
-        s = s.filter('match', {'legislative_body.city': city})
-    if state:
-        s = s.filter('match', {'legislative_body.state': state})
-    if sponsor_name:
-        s = s.filter('match', {'sponsor.name': sponsor_name})
-    if sponsor_district:
-        s = s.filter('match', {'sponsor.district': sponsor_district})
+    bill_types = ','.join([query.get(key) for key in query.keys() if key.startswith('bill_type')])
+    s = Search(search_string=search_string,
+               city=city,
+               state=state,
+               sponsor_name=sponsor_name,
+               sponsor_district=sponsor_district,
+               bill_types=bill_types)
+    es_search = s.get_elasticsearch_query().using(ES_CONNECTION).index(INDEX_PATTERN)
+
     if meeting_date_gt or meeting_date_lt:
         r = {}
         if meeting_date_gt:
             r['gte'] = parsedate(meeting_date_gt)
         if meeting_date_lt:
             r['lt'] = parsedate(meeting_date_lt)
-        s = s.filter('range', **{'meetings.time': r})
-    print(s.to_dict())
-    hits = [hit for hit in s[page * 10:(page+1)* 10].execute()]
+        es_search = es_search.filter('range', **{'meetings.time': r})
+    print(es_search.to_dict())
+    hits = [hit for hit in es_search[page * 10:(page+1)* 10].execute()]
 
     query = query.copy()
     if 'csrfmiddlewaretoken' in query:
         del query['csrfmiddlewaretoken']
 
-    more_pages = s.count() > page * 10 + 10
+    more_pages = es_search.count() > page * 10 + 10
 
     return render(request, 'frontend/search_results.html', {
         'hits': hits,
@@ -77,7 +69,7 @@ def home(request):
 
 @login_required
 def bill(request, bill_id):
-    s = Search(using=ES_CONNECTION, index=INDEX_PATTERN).query('match', id=bill_id)
+    s = EsSearch(using=ES_CONNECTION, index=INDEX_PATTERN).query('match', id=bill_id)
     hits = [hit for hit in s[0:1].execute()]
     hit = hits[0]
     hit.text = '<p>%s</p>' % '</p><p>'.join(hit.text.split('\n\n') if hit.text else '')

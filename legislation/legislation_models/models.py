@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+from elasticsearch_dsl import Search as EsSearch, Q
 
 
 class Place(models.Model):
@@ -123,6 +126,43 @@ class AgendaItem(models.Model):
 
     class Meta:
         db_table = 'agenda_item'
+
+
+class Search(models.Model):
+    owner = models.ForeignKey(User)
+    search_string = models.TextField(null=True)
+    city = models.CharField(max_length=100, null=True)
+    state = models.CharField(max_length=50, null=True)
+    sponsor_name = models.CharField(max_length=256, null=True)
+    sponsor_district = models.CharField(max_length=256, null=True)
+    bill_types = models.TextField(null=True)
+
+    def get_elasticsearch_query(self):
+        bill_types = self.bill_types.split(',') if self.bill_types else None
+        s = EsSearch()
+        if self.search_string:
+            s = s.query('query_string',
+                        query=self.search_string,
+                        fields=['number, title', 'text', 'summary'])
+        if bill_types:
+            bill_type_query = Q('match', bill_type=bill_types[0])
+            for bill_type in bill_types[1:]:
+                bill_type_query = bill_type_query | Q('match', bill_type=bill_type)
+            s = s.filter(bill_type_query)
+        if self.city:
+            s = s.filter('match', {'legislative_body.city': self.city})
+        if self.state:
+            s = s.filter('match', {'legislative_body.state': self.state})
+        if self.sponsor_name:
+            s = s.filter('match', {'sponsor.name': self.sponsor_name})
+        if self.sponsor_district:
+            s = s.filter('match', {'sponsor.district': self.sponsor_district})
+        return s
+
+
+    class Meta:
+        db_table = 'search'
+
 
 
 
