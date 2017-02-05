@@ -1,11 +1,13 @@
 {% load static %}
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand navbar-left" href="/legis/">
-                <!--TODO: Add cc notice Owl Eyes by KEN MURRAY from the Noun Project https://thenounproject.com/search/?q=owl&i=579501-->
-                <img src="{% static "frontend/logo.png" %}" height="150%"/></a>
-        </div>
-        <div class="navbar-right"><a href="/accounts/logout">Logout</a></div>
-    </div>
-</nav>
+<meta charset="utf-8">
+
+<title>Athena</title>
+<meta name="description" content="Legislation search and notification for activists">
+<meta name="author" content="Darla Magdalene Shockley">
+<link rel='shortcut icon' type='image/x-icon' href='{% static "frontend/favicon.ico" %}' />
+<link rel="stylesheet" href="{% static "frontend/bootstrap.min.css" %}"/>
+<link rel="stylesheet" href="{% static "frontend/extra.css" %}"/>
+
+<!--[if lt IE 9]>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+<![endif]-->
