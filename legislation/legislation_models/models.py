@@ -68,6 +68,8 @@ class Sponsor(models.Model):
 
 
 class Bill(models.Model):
+    STATUS_NEEDS_UPDATE = 'NU'
+    STATUS_UP_TO_DATE = 'UTD'
     number = models.CharField(max_length=256, null=False)
     legislative_body = models.ForeignKey('LegislativeBody', null=False)
     bill_type = models.CharField(max_length=1024, null=True)
@@ -75,6 +77,10 @@ class Bill(models.Model):
     text = models.TextField(null=True)
     summary = models.TextField(null=True)
     link = models.CharField(max_length=1024, null=True)
+    status = models.CharField(max_length=3,
+                              choices=((STATUS_NEEDS_UPDATE, 'Needs Update'),
+                                       (STATUS_UP_TO_DATE, 'Up-to-date')),
+                              default=STATUS_NEEDS_UPDATE)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
 
