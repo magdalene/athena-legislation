@@ -129,9 +129,18 @@ class AgendaItem(models.Model):
 
 
 class Search(models.Model):
+    NOTIFICATION_NONE = 'none'
+    NOTIFICATION_DAILY = 'daily'
+    NOTIFICATION_WEEKLY = 'weekly'
+    NOTIFICATION_CHOICES = ((NOTIFICATION_NONE, 'do not notify me'),
+                            (NOTIFICATION_DAILY, 'notify me daily'),
+                            (NOTIFICATION_WEEKLY, 'notify me weekly'))
     owner = models.ForeignKey(User)
     query_params = models.TextField()
     name = models.TextField()
+    notification = models.CharField(max_length=24,
+                                    choices=NOTIFICATION_CHOICES,
+                                    default=NOTIFICATION_NONE)
     search_string = models.TextField(null=True)
     city = models.CharField(max_length=100, null=True)
     state = models.CharField(max_length=50, null=True)

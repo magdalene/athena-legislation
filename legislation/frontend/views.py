@@ -102,7 +102,24 @@ def save_search(request):
 
 @login_required
 def searches(request):
-    return render(request, 'frontend/searches.html', {'searches': Search.objects.filter(owner=request.user)})
+    searches = {str(search.id): search for search in Search.objects.filter(owner=request.user)}
+    if request.method == 'POST':
+        for key, value in request.POST.items():
+            if key.startswith('notification-search'):
+                search = searches.get(key.replace('notification-search-', ''))
+                if search is not None and search.notification != value:
+                    search.notification = value
+                    search.save()
+            if key.startswith('delete'):
+                search_id = key.replace('delete-', '')
+                search = searches.get(search_id)
+                search.delete()
+                del searches[search_id]
+
+    return render(request, 'frontend/searches.html', {
+        'searches': searches.values(),
+        'notification_options': Search.NOTIFICATION_CHOICES
+    })
 
 @login_required
 def home(request):

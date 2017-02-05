@@ -14,11 +14,26 @@
 <div class="col-lg-8 col-lg-offset-2">
 {% if searches %}
     <h3>Saved Searches</h3>
-    <ul class="list-unstyled">
+    <form method="post" action="/legis/saved-searches">{% csrf_token %}
+    <table class="table">
     {% for search in searches %}
-    <li><a href="/legis/search?{{ search.query_params }}">{{  search.name }}</a></li>
+    <tr class="saved-search-row">
+        <td><a href="/legis/search?{{ search.query_params }}">{{  search.name }}</a></td>
+        <td>
+            <select name="notification-search-{{ search.id }}">
+                {% for option in notification_options %}
+                    <option value="{{ option.0 }}" {% if search.notification == option.0 %}selected{% endif %}>{{ option.1 }}</option>
+                {% endfor %}
+            </select>
+        </td>
+        <td>
+            <input type="checkbox" name="delete-{{ search.id }}" id="delete"><label for="delete">Delete</label>
+        </td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
+    <button class="btn btn-default pull-right" type="submit" value="Save changes">Save changes</button>
+    </form>
 {% else %}
     <h3>You don't have any saved searches.</h3>
 {% endif %}
