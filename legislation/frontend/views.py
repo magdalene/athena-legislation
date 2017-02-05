@@ -25,16 +25,14 @@ def search(request):
     print(query)
     page = int(query.get('page', 0))
     search_string = query.get('search')
-    city = query.get('city')
-    state = query.get('state')
+    place = query.get('place')
     sponsor_name = query.get('sponsor_name')
     sponsor_district = query.get('sponsor_district')
     meeting_date_gt = query.get('meeting_date_gt')
     meeting_date_lt = query.get('meeting_date_lt')
     bill_types = ','.join([query.get(key) for key in query.keys() if key.startswith('bill_type')])
     s = Search(search_string=search_string,
-               city=city,
-               state=state,
+               place=place,
                sponsor_name=sponsor_name,
                sponsor_district=sponsor_district,
                bill_types=bill_types)

@@ -142,8 +142,7 @@ class Search(models.Model):
                                     choices=NOTIFICATION_CHOICES,
                                     default=NOTIFICATION_NONE)
     search_string = models.TextField(null=True)
-    city = models.CharField(max_length=100, null=True)
-    state = models.CharField(max_length=50, null=True)
+    place = models.TextField(null=True)
     sponsor_name = models.CharField(max_length=256, null=True)
     sponsor_district = models.CharField(max_length=256, null=True)
     bill_types = models.TextField(null=True)
@@ -160,10 +159,8 @@ class Search(models.Model):
             for bill_type in bill_types[1:]:
                 bill_type_query = bill_type_query | Q('match', bill_type=bill_type)
             s = s.filter(bill_type_query)
-        if self.city:
-            s = s.filter('match', {'legislative_body.city': self.city})
-        if self.state:
-            s = s.filter('match', {'legislative_body.state': self.state})
+        if self.place:
+            s = s.filter('query_string', query=self.place, fields=['legislative_body.state', 'legislative_body.city'])
         if self.sponsor_name:
             s = s.filter('match', {'sponsor.name': self.sponsor_name})
         if self.sponsor_district:
