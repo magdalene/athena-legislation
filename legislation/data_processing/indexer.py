@@ -26,14 +26,14 @@ INDEX_MAPPING = {
             'legislative_body': {
                 'properties': {
                     'name': {'type': 'text', 'analyzer': 'english'},
-                    'city': {'type': 'string', 'index': 'not_analyzed'},
-                    'state': {'type': 'string', 'index': 'not_analyzed'}
+                    'city': {'type': 'string'},
+                    'state': {'type': 'string'}
                 },
             },
             'sponsors': {
                 'properties': {
                     'name': {'type': 'text', 'analyzer': 'english'},
-                    'district': {'type': 'string', 'index': 'not_analyzed'},
+                    'district': {'type': 'string'},
                     'sponsor_type': {'type': 'string', 'index': 'not_analyzed'},
                     'link': {'type': 'string', 'index': 'not_analyzed'}
                 }
