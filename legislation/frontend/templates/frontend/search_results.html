@@ -32,11 +32,11 @@
 
 <div class="bottom-nav col-lg-10 col-lg-offset-1">
     {% if page != 0 %}
-        <a class="pull-left" href="/legis/search?{{ query }}&page={{ page|add:"-1" }}">Prev</a>
+        <a class="pull-left navbar-text" href="/legis/search?{{ query }}&page={{ page|add:"-1" }}">Prev</a>
     {% endif %}
-        <input type="text" onkeyup="updateSaveLinkHref()" id="search-name" placeholder="Name your saved search" name="search-name"/><a id="search-link" href="">Save Search</a>
+        <span class="navbar-text"><input type="text" onkeyup="updateSaveLinkHref()" id="search-name" placeholder="Name your saved search" name="search-name"/><a id="search-link" class="save-search-link" href="">Save Search</a></span>
     {% if more_pages %}
-        <a class="pull-right" href="/legis/search?{{ query }}&page={{ page|add:1 }}">Next</a>
+        <a class="pull-right navbar-text" href="/legis/search?{{ query }}&page={{ page|add:1 }}">Next</a>
     {% endif %}
 </div>
 

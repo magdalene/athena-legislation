@@ -13,7 +13,8 @@
 <div class="container">
 <div class="col-lg-8 col-lg-offset-2">
 {% if searches %}
-    <ul>
+    <h3>Saved Searches</h3>
+    <ul class="list-unstyled">
     {% for search in searches %}
     <li><a href="/legis/search?{{ search.query_params }}">{{  search.name }}</a></li>
     {% endfor %}
