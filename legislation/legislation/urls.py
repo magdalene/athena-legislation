@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib.auth.views import logout
 from django.contrib import admin
-from frontend.views import search, home, bill
+from frontend.views import *
 
 urlpatterns = [
     #url(r'^admin/', admin.site.urls),
@@ -25,5 +25,7 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^legis/$', home, name='home'),
     url(r'^legis/search', search, name='search'),
+    url(r'^legis/save-search', save_search, name='save-search'),
+    url(r'^legis/saved-searches', searches, name='searches'),
     url(r'^legis/bill/(?P<bill_id>\d+)', bill, name='bill')
 ]

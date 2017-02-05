@@ -5,6 +5,14 @@
 <html lang="en">
 <head>
     {% include "frontend/header.html" %}
+
+    <script>
+        function updateSaveLinkHref() {
+            var savedSearchLink = document.getElementById('search-link');
+            var name = document.getElementById('search-name').value;
+            savedSearchLink.setAttribute('href', "/legis/save-search?{{ query }}&name=" + encodeURIComponent(name));
+        }
+    </script>
 </head>
 
 <body>
@@ -26,6 +34,7 @@
     {% if page != 0 %}
         <a class="pull-left" href="/legis/search?{{ query }}&page={{ page|add:"-1" }}">Prev</a>
     {% endif %}
+        <input type="text" onkeyup="updateSaveLinkHref()" id="search-name" placeholder="Name your saved search" name="search-name"/><a id="search-link" href="">Save Search</a>
     {% if more_pages %}
         <a class="pull-right" href="/legis/search?{{ query }}&page={{ page|add:1 }}">Next</a>
     {% endif %}

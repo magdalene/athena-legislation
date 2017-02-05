@@ -130,6 +130,8 @@ class AgendaItem(models.Model):
 
 class Search(models.Model):
     owner = models.ForeignKey(User)
+    query_params = models.TextField()
+    name = models.TextField()
     search_string = models.TextField(null=True)
     city = models.CharField(max_length=100, null=True)
     state = models.CharField(max_length=50, null=True)

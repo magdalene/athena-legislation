@@ -1,0 +1,27 @@
+{% load static %}
+
+<!doctype html>
+
+<html lang="en">
+<head>
+    {% include "frontend/header.html" %}
+</head>
+
+<body>
+{% include "frontend/top-navbar.html" %}
+
+<div class="container">
+<div class="col-lg-8 col-lg-offset-2">
+{% if searches %}
+    <ul>
+    {% for search in searches %}
+    <li><a href="/legis/search?{{ search.query_params }}">{{  search.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <h3>You don't have any saved searches.</h3>
+{% endif %}
+</div>
+</div>
+</body>
+</html>

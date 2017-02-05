@@ -2,7 +2,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from dateutil.parser import parse as parsedate
 
@@ -14,6 +14,7 @@ from legislation_models.models import Bill, Search
 ES_CONNECTION = Elasticsearch([{'host': 'localhost', 'port': '9200'}])
 
 INDEX_PATTERN = 'bills'
+
 
 @login_required
 def search(request):
@@ -61,6 +62,41 @@ def search(request):
         'page': page,
         'more_pages': more_pages
     })
+
+
+@login_required
+def save_search(request):
+    query = request.GET
+    name = query.get('name')
+    search_string = query.get('search')
+    city = query.get('city')
+    state = query.get('state')
+    sponsor_name = query.get('sponsor_name')
+    sponsor_district = query.get('sponsor_district')
+    bill_types = ','.join([query.get(key) for key in query.keys() if key.startswith('bill_type')])
+    query = request.GET.copy()
+    if 'meeting_date_gt' in query:
+        del query['meeting_date_gt']
+    if 'meeting_date_lt' in query:
+        del query['meeting_date_lt']
+    # TODO: check bill_type saving actually works correctly
+    query = query.copy()
+    del query['name']
+    s = Search(search_string=search_string,
+               city=city,
+               state=state,
+               sponsor_name=sponsor_name,
+               sponsor_district=sponsor_district,
+               bill_types=bill_types,
+               name=name,
+               query_params=query,
+               owner=request.user)
+    s.save()
+    return redirect('/legis/saved-searches')
+
+@login_required
+def searches(request):
+    return render(request, 'frontend/searches.html', {'searches': Search.objects.filter(owner=request.user)})
 
 @login_required
 def home(request):
