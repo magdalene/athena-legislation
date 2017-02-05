@@ -15,37 +15,22 @@ ATLANTA = Place.objects.get(name='Atlanta')
 ATLANTA_CITY_COUNCIL = LegislativeBody.objects.get(place=ATLANTA)
 
 
-class AlantaCityCouncilSpider(CrawlSpider):
+class AlantaCityCouncilMeetingSpider(CrawlSpider):
     name = "atlanta"
     allowed_domains = ["atlantacityga.iqm2.com"]
     start_urls = ['http://atlantacityga.iqm2.com/Citizens/Calendar.aspx']
     #start_urls = ['http://atlantacityga.iqm2.com/Citizens/Detail_Meeting.aspx?ID=1984']
     rules = (
-        # TODO: add motions?
-        Rule(LinkExtractor(allow='.*Detail_LegiFile.*',
-                           deny=['.*Print=Yes.*', '.*FileOpen.*', '.*Detail_Motion.*']),
-             callback='parse_ordinance'),
         Rule(LinkExtractor(allow='.*Detail_Meeting.*',
                            deny=['.*Print=Yes.*', '.*FileOpen.*', '.*Detail_Motion.*']),
-             callback='parse_meeting', follow=True)
+             callback='parse_meeting', follow=True, process_links='process_links'),
     )
 
-    def parse_ordinance(self, response):
-        bill_type = response.css('#ContentPlaceholder1_lblLegiFileType')[0].xpath('text()').extract()[0]
-        number = response.css('#ContentPlaceholder1_lblResNum')[0].xpath('text()').extract()[0]
-        summary = response.css('#ContentPlaceholder1_lblLegiFileTitle')[0].xpath('text()').extract()[0]
-        text_paragraphs = response.css('#divBody .LegiFileSectionContents p')
-        text_paragraph_texts = [''.join(p.xpath('.//text()').extract()).strip() for p in text_paragraphs]
-        text = '\n\n'.join([p for p in text_paragraph_texts if len(p)])
-        link = response.url
-        # TODO: history
-        # TODO: sponsor(s)
-        bill, _ = Bill.objects.get_or_create(number=number, legislative_body=ATLANTA_CITY_COUNCIL)
-        bill.bill_type = bill_type
-        bill.summary = summary
-        bill.link = link
-        bill.text = text
-        bill.save()
+    def process_links(self, links):
+        for link in links:
+            if Meeting.objects.filter(link=link.url).count():
+                continue
+            yield link
 
     def parse_meeting(self, response):
         datestring = response.css('#ContentPlaceholder1_lblMeetingDate::text').extract()[0]
@@ -73,6 +58,8 @@ class AlantaCityCouncilSpider(CrawlSpider):
             if created:
                 bill.summary = summary
                 bill.link = link
+            if created or bill.status != Bill.STATUS_NEEDS_UPDATE:
+                bill.status = Bill.STATUS_NEEDS_UPDATE
                 bill.save()
             agenda_item, _ = AgendaItem.objects.get_or_create(meeting=meeting, bill=bill)
 
