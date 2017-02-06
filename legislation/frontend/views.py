@@ -1,4 +1,5 @@
 import json
+from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -43,7 +44,7 @@ def search(request):
         if meeting_date_gt:
             r['gte'] = parsedate(meeting_date_gt)
         if meeting_date_lt:
-            r['lt'] = parsedate(meeting_date_lt)
+            r['lt'] = parsedate(meeting_date_lt) + timedelta(days=1)
         es_search = es_search.filter('range', **{'meetings.time': r})
     print(es_search.to_dict())
     hits = [hit for hit in es_search[page * 10:(page+1)* 10].execute()]
