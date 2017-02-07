@@ -4,7 +4,12 @@
 
 <html lang="en">
 <head>
+
     {% include "frontend/header.html" %}
+
+    <link rel="stylesheet" href="{% static "frontend/pikaday.css" %}"/>
+    <script src="{% static "frontend/moment.js" %}"></script>
+    <script src="{% static "frontend/pikaday.js" %}"></script>
 </head>
 
 <body>
@@ -21,7 +26,27 @@
     </div>
     <div class="form-group">
         <label for="start-date">From</label><input type="text" name="meeting_date_gt" class="form-control" id="start-date" placeholder="YYYY-MM-DD">
+        <!-- sorry future me, to have to deal with this bullshit here -->
+        <script>
+            var startPicker = new Pikaday({
+                field: document.getElementById('start-date'),
+                format: 'YYYY-MM-DD',
+                onSelect: function() {
+                    console.log(this.getMoment().format('YYYY-MM-DD'));
+                }
+            });
+        </script>
         <label for="end-date">To</label><input type="text" name="meeting_date_lt" class="form-control" id="end-date" placeholder="YYYY-MM-DD">
+        <script>
+                var endPicker = new Pikaday({
+                    field: document.getElementById('end-date'),
+                    format: 'YYYY-MM-DD',
+                    onSelect: function() {
+                        console.log(this.getMoment().format('YYYY-MM-DD'));
+                    }
+                });
+        </script>
+
     </div>
     <div class="form-group">
         {% for bill_type in bill_types %}
