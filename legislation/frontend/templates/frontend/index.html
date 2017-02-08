@@ -24,7 +24,7 @@
 <div class="col-lg-8 col-lg-offset-2">
 <form method="post" action="/legis/search">{% csrf_token %}
     <div class="form-group">
-        <label for="search-text"></label><input placeholder="Search text..." type="text" name="search" class="form-control" id="search-text">
+        <label for="search-text"></label><input placeholder="Search text (leave blank to see all results)..." type="text" name="search" class="form-control" id="search-text">
     </div>
     <div class="form-group">
         <label for="place"></label><div type="text" name="place" id="place" class="form-control"></div>
