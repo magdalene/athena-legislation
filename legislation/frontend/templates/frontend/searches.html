@@ -18,7 +18,7 @@
     <table class="table">
     {% for search in searches %}
     <tr class="saved-search-row">
-        <td><a href="/legis/search?{{ search.query_params }}">{{  search.name }}</a></td>
+        <td><a href="/legis/search?{{ search.query_params }}">{{ search.name }}</a></td>
         <td>
             <select name="notification-search-{{ search.id }}">
                 {% for option in notification_options %}
