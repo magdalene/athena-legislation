@@ -100,7 +100,7 @@ def save_search(request):
                sponsor_district=sponsor_district,
                bill_types=bill_types,
                name=name,
-               query_params=query,
+               query_params=query.urlencode(),
                owner=request.user)
     s.save()
     return redirect('/legis/saved-searches')
