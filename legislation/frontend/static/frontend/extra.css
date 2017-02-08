@@ -29,10 +29,24 @@ body {
     clear: both;
 }
 
+.comment-text {
+    min-height: 200px;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 30px;
+}
+
+p {
+    font-size: medium;
+    padding-bottom: 7px;
+    padding-top: 7px;
+}
+
+p.text-muted {
+    font-size: small;
 }

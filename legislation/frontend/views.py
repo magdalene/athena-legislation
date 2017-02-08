@@ -1,5 +1,8 @@
 import json
+import smtplib
 from datetime import timedelta
+from email.mime.text import MIMEText
+import logging
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -11,10 +14,14 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search as EsSearch
 
 from legislation_models.models import Bill, Search, Place
+from legislation.settings import EMAIL_SERVER
 
 ES_CONNECTION = Elasticsearch([{'host': 'localhost', 'port': '9200'}])
 
 INDEX_PATTERN = 'bills'
+
+# TODO: load values from config
+logging.basicConfig(filename='/var/log/legislation/application.log', level=logging.DEBUG)
 
 
 @login_required
@@ -134,6 +141,27 @@ def home(request):
     bill_types = [bill.bill_type if bill.bill_type is not None else 'Other/Missing' for bill in Bill.objects.distinct('bill_type')]
     places_json = json.dumps([place.name for place in Place.objects.all()])
     return render(request, 'frontend/index.html', {'bill_types': bill_types, 'places_json': places_json})
+
+@login_required
+def contact(request):
+    done = False
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if not email:
+            email = ''
+        comment = request.POST.get('comment')
+        subject = 'Athena feedback from %s' % request.user.username
+        msg_text = 'From: %s\n\nComment:\n\n%s' % (email, comment)
+        logging.debug('Sending message (%s): %s' % (email, msg_text))
+        msg = MIMEText(msg_text)
+        msg['Subject'] = subject
+        msg['From'] = 'athena@zolnetwork.com'
+        msg['To'] = 'shockley@zolnetwork.com'
+        s = smtplib.SMTP(EMAIL_SERVER)
+        s.send_message(msg)
+        s.quit()
+        done = True
+    return render(request, 'frontend/contact.html', {'done': done})
 
 @login_required
 def bill(request, bill_id):

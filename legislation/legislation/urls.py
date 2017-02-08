@@ -24,6 +24,7 @@ urlpatterns = [
      {'next_page': '/legis/'}),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^legis/$', home, name='home'),
+    url(r'^legis/contact', contact, name='contact'),
     url(r'^legis/search', search, name='search'),
     url(r'^legis/save-search', save_search, name='save-search'),
     url(r'^legis/saved-searches', searches, name='searches'),

@@ -1,0 +1,46 @@
+{% load static %}
+
+<!doctype html>
+
+<html lang="en">
+<head>
+    {% include "frontend/header.html" %}
+</head>
+
+<body>
+{% include "frontend/top-navbar.html" %}
+
+<div class="container">
+<div class="col-lg-8 col-lg-offset-2">
+{% if done %}
+    <h3>Thank you for your feedback!</h3>
+{% else %}
+    <p>
+        Athena is in the very early stages of development, and I appreciate
+        any feedback you have to help me make it the most useful tool it can be.
+        Thanks for your help!
+    </p>
+    <p>
+        You can also request I add your city next. I can't promise I will do it
+        (some are easier to add than others), but I will check it out and get
+        back to you. For my sanity, please include a link to your city council
+        homepage!
+    </p>
+    <form action="/legis/contact" method="post">{% csrf_token %}
+        <div class="form-group">
+            <input placeholder="Email (optional)" type="email" name="email" id="email" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <textarea placeholder="Please enter your comments..." name="comment" id="comment" class="form-control comment-text"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </form>
+{% endif %}
+</div>
+</div>
+
+{% include "frontend/footer.html" %}
+</body>
+</html>
