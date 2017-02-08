@@ -151,6 +151,7 @@ class Search(models.Model):
 
     def get_elasticsearch_query(self):
         bill_types = self.bill_types.split(',') if self.bill_types else None
+        places = self.place.split(',') if self.place else None
         s = EsSearch()
         if self.search_string:
             s = s.query('query_string',
@@ -161,8 +162,11 @@ class Search(models.Model):
             for bill_type in bill_types[1:]:
                 bill_type_query = bill_type_query | Q('match', bill_type=bill_type)
             s = s.filter(bill_type_query)
-        if self.place:
-            s = s.filter('query_string', query=self.place, fields=['legislative_body.state', 'legislative_body.city'])
+        if places:
+            place_query = Q('match', **{'legislative_body.place': places[0]})
+            for place in places[1:]:
+                place_query = place_query | Q('match', **{'legislative_body.place': place})
+            s = s.filter(place_query)
         if self.sponsor_name:
             s = s.filter('match', {'sponsor.name': self.sponsor_name})
         if self.sponsor_district:

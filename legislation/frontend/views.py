@@ -10,7 +10,7 @@ from dateutil.parser import parse as parsedate
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search as EsSearch
 
-from legislation_models.models import Bill, Search
+from legislation_models.models import Bill, Search, Place
 
 ES_CONNECTION = Elasticsearch([{'host': 'localhost', 'port': '9200'}])
 
@@ -26,7 +26,8 @@ def search(request):
     print(query)
     page = int(query.get('page', 0))
     search_string = query.get('search')
-    place = query.get('place')
+    place = query.getlist('place[]')
+    place = ','.join(place)
     sponsor_name = query.get('sponsor_name')
     sponsor_district = query.get('sponsor_district')
     meeting_date_gt = query.get('meeting_date_gt')
@@ -131,7 +132,8 @@ def searches(request):
 @login_required
 def home(request):
     bill_types = [bill.bill_type if bill.bill_type is not None else 'Other/Missing' for bill in Bill.objects.distinct('bill_type')]
-    return render(request, 'frontend/index.html', {'bill_types': bill_types})
+    places_json = json.dumps([place.name for place in Place.objects.all()])
+    return render(request, 'frontend/index.html', {'bill_types': bill_types, 'places_json': places_json})
 
 @login_required
 def bill(request, bill_id):

@@ -28,7 +28,8 @@ INDEX_MAPPING = {
                 'properties': {
                     'name': {'type': 'text', 'analyzer': 'english'},
                     'city': {'type': 'string'},
-                    'state': {'type': 'string'}
+                    'state': {'type': 'string'},
+                    'place': {'type': 'string', 'index': 'not_analyzed'}
                 },
             },
             'sponsors': {
@@ -81,8 +82,10 @@ def index_actions():
         if len(cities):
             city = cities[0]
             state = city.state
+            place_name = city.place.name
         else:
             state = State.objects.get(place=bill.legislative_body.place)
+            place_name = state.place.name
         doc = {
             'id': bill.id,
             'modified_date': datetime.now(),
@@ -95,6 +98,7 @@ def index_actions():
             'legislative_body': {
                 'name': bill.legislative_body.name,
                 'city': city.place.name if city else None,
+                'place': place_name,
                 'state': state.place.name
             },
             'sponsors': [{
