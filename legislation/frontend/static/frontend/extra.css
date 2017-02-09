@@ -5,6 +5,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 30px;
+    font-size: medium;
 }
 
 em {
@@ -25,8 +26,8 @@ em {
 }
 
 .bottom-nav {
-    padding-top: 50px;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .container {
