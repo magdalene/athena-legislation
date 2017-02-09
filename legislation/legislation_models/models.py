@@ -156,7 +156,7 @@ class Search(models.Model):
         if self.search_string:
             s = s.query('query_string',
                         query=self.search_string,
-                        fields=['number, title', 'text', 'summary'])
+                        fields=['number', 'title', 'text', 'summary'])
         if bill_types:
             bill_type_query = Q('match', bill_type=bill_types[0])
             for bill_type in bill_types[1:]:
