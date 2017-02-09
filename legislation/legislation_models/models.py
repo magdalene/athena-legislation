@@ -157,6 +157,9 @@ class Search(models.Model):
             s = s.query('query_string',
                         query=self.search_string,
                         fields=['number', 'title', 'text', 'summary'])
+            s = s.highlight('title', fragment_size=250, number_of_fragments=1)
+            s = s.highlight('text', fragment_size=250, number_of_fragments=1)
+            s = s.highlight('summary', fragment_size=250, number_of_fragments=1)
         if bill_types:
             bill_type_query = Q('match', bill_type=bill_types[0])
             for bill_type in bill_types[1:]:

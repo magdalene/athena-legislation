@@ -7,6 +7,11 @@ body {
   margin-bottom: 30px;
 }
 
+em {
+    font-weight: bold;
+    font-style: normal;
+}
+
 .save-search-link {
     padding-left: 15px;
 }

@@ -28,7 +28,7 @@
         {% for result in hits %}
         <a href="/legis/bill/{{ result.id }}">
             <dt class="result">{{ result.number }}</dt>
-            <dd class="result">{{ result.summary }}</dd>
+            <dd class="result">{{ result.highlight|safe }}</dd>
         </a>
         {% endfor %}
     </dl>

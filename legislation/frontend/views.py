@@ -1,5 +1,6 @@
 import json
 import smtplib
+import string
 from datetime import timedelta
 from email.mime.text import MIMEText
 import logging
@@ -22,6 +23,15 @@ INDEX_PATTERN = 'bills'
 
 # TODO: load values from config
 logging.basicConfig(filename='/var/log/legislation/application.log', level=logging.DEBUG)
+
+
+def _format(s):
+    s = s.replace('<em>', 'SSSSSSSSSSSSSSSSSSS')
+    s = s.replace('</em>', 'EEEEEEEEEEEEEEEEEE')
+    s = s.strip(string.punctuation).strip()
+    s = s.replace('SSSSSSSSSSSSSSSSSSS', '<em>')
+    s = s.replace('EEEEEEEEEEEEEEEEEE', '</em>')
+    return s
 
 
 @login_required
@@ -65,6 +75,24 @@ def search(request):
     total = es_search.count()
 
     more_pages = total > page * 10 + 10
+
+    highlights = [hit.meta.highlight.to_dict() if hasattr(hit.meta, 'highlight') else {} for hit in hits]
+    hits = [hit.to_dict() for hit in hits]
+    for hit, highlight in zip(hits, highlights):
+        if highlight.get('summary'):
+            hit['highlight'] = '...%s...' % _format(highlight['summary'][0])
+        elif highlight.get('text'):
+            hit['highlight'] = '...%s...' % _format(highlight['text'][0])
+        elif highlight.get('title'):
+            hit['highlight'] = '...%s...' % _format(highlight['title'][0])
+        elif hit['summary']:
+            hit['highlight'] = '%s...' % _format(hit['summary'][0:250])
+        elif hit['text']:
+            hit['highlight'] = '%s...' % _format(hit['text'][0:250])
+        elif hit['title']:
+            hit['highlight'] = '%s...' % _format(hit['title'][0:250])
+        else:
+            hit['highlight'] = ''
 
     return render(request, 'frontend/search_results.html', {
         'hits': hits,
