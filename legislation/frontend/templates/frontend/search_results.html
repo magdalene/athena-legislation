@@ -12,6 +12,15 @@
             var name = document.getElementById('search-name').value;
             savedSearchLink.setAttribute('href', "/legis/save-search?{{ query }}&name=" + encodeURIComponent(name));
         }
+
+        function checkSaveName() {
+            var searchName = document.getElementById('search-name');
+            if (!searchName.value) {
+                this.event.returnValue = false;
+                // TODO: some feedback, but right now it's broken
+                //searchName.setAttribute('class', 'pull-right navbar-text');
+            }
+        }
     </script>
 </head>
 
@@ -20,7 +29,9 @@
 
 <div class="container">
     <div class="col-lg-10">
-    <h3>Search Results ({{ start_index }}...{{ end_index }} / {{ total }})</h3>
+    <h3 class="search-header">Search Results ({{ start_index }}...{{ end_index }} / {{ total }}) <div class="pull-right save-search-text">
+        <input type="text" onkeyup="updateSaveLinkHref()" id="search-name" placeholder="Name your saved search" name="search-name"/><label for="search-name"><a id="search-link" class="save-search-link" onclick="checkSaveName()" href="">Save Search</a></label>
+        </div></h3>
     <dl class="dl-horizontal">
         {% if not hits %}
             No results...
@@ -39,7 +50,7 @@
     {% if page != 0 %}
         <a class="pull-left navbar-text" href="/legis/search?{{ query }}&page={{ page|add:"-1" }}">Prev</a>
     {% endif %}
-        <span class="navbar-text"><input type="text" onkeyup="updateSaveLinkHref()" id="search-name" placeholder="Name your saved search" name="search-name"/><a id="search-link" class="save-search-link" href="">Save Search</a></span>
+
     {% if more_pages %}
         <a class="pull-right navbar-text" href="/legis/search?{{ query }}&page={{ page|add:1 }}">Next</a>
     {% endif %}

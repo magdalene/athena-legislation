@@ -21,6 +21,10 @@ em {
     padding-right: 15px;
 }
 
+.save-search-text {
+    font-size: medium;
+}
+
 .result {
     padding-top: 20px;
 }

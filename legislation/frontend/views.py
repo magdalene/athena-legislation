@@ -41,6 +41,11 @@ def search(request):
         query = request.POST
     else:
         query = request.GET
+    query = query.copy()
+    if 'csrfmiddlewaretoken' in query:
+        del query['csrfmiddlewaretoken']
+    if request.method == 'POST':
+        return redirect('/legis/search?%s' % query.urlencode())
     print(query)
     page = int(query.get('page', 0))
     search_string = query.get('search')
