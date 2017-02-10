@@ -20,7 +20,7 @@
             {% endfor %}{% endif %}</td>
         </tr><tr>    <td>Bill Type</td><td>{{  bill.bill_type  }}</td>
         </tr><tr>    <td>Meetings</td><td>{% if bill.meetings %}{% for meeting in bill.meetings %}
-            <a href="{{ meeting.link }}">{{ meeting.name }} ({{ meeting.time }} - {{ meeting.address }})</a>,
+            <a target="_blank" href="{{ meeting.link }}">{{ meeting.name }} ({{ meeting.time }} - {{ meeting.address }})</a>,
         {% endfor %}{% endif %}</td>
         </tr><tr>    <td>Title</td><td>{{ bill.title }}</td>
         </tr><tr>    <td>Summary</td><td>{{ bill.summary }}</td>
