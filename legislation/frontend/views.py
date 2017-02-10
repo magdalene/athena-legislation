@@ -26,6 +26,7 @@ logging.basicConfig(filename='/var/log/legislation/application.log', level=loggi
 
 
 def _format(s):
+    # This is pretty dumb. Probably do something less dumb.
     s = s.replace('<em>', 'SSSSSSSSSSSSSSSSSSS')
     s = s.replace('</em>', 'EEEEEEEEEEEEEEEEEE')
     s = s.strip(string.punctuation).strip()
