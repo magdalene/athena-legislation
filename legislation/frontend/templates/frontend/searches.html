@@ -27,10 +27,10 @@
             </select>
         </td>
         <td>
-            <input  {% if search.notify_on_update %}checked{% endif %} type="checkbox" name="notify-updates-{{ search.id }}" id="notify-updates"><label for="notify-updates">Notify on update</label>
+            <input  {% if search.notify_on_update %}checked{% endif %} type="checkbox" name="notify-updates-{{ search.id }}" id="notify-updates-{{ search.id }}"><label for="notify-updates-{{ search.id }}">Notify on update</label>
         </td>
         <td>
-            <input type="checkbox" name="delete-{{ search.id }}" id="delete"><label for="delete">Delete</label>
+            <input type="checkbox" name="delete-{{ search.id }}" id="delete-{{ search.id }}"><label for="delete-{{ search.id }}">Delete</label>
         </td>
     </tr>
     {% endfor %}
