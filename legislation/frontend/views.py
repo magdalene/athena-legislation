@@ -162,7 +162,8 @@ def searches(request):
 
     return render(request, 'frontend/searches.html', {
         'searches': searches.values(),
-        'notification_options': Search.NOTIFICATION_CHOICES
+        'notification_options': Search.NOTIFICATION_CHOICES,
+        'save_success': request.method == 'POST'
     })
 
 @login_required

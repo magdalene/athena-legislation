@@ -5,6 +5,12 @@
 <html lang="en">
 <head>
     {% include "frontend/header.html" %}
+    <script>
+        function removeChangeNotification() {
+            var saveSuccess = document.getElementById('save-success');
+            saveSuccess.parentNode.removeChild(saveSuccess);
+        }
+    </script>
 </head>
 
 <body>
@@ -14,23 +20,26 @@
 <div class="col-lg-8 col-lg-offset-2">
 {% if searches %}
     <h3>Saved Searches</h3>
+    {% if save_success %}
+        <p id="save-success" class="bg-success">Good news! Your changes have been saved.</p>
+    {% endif %}
     <form method="post" action="/legis/saved-searches">{% csrf_token %}
     <table class="table">
     {% for search in searches %}
     <tr class="saved-search-row">
         <td><a href="/legis/search?{{ search.query_params }}">{{ search.name }}</a></td>
         <td>
-            <select name="notification-search-{{ search.id }}">
+            <select onchange="removeChangeNotification()"  name="notification-search-{{ search.id }}">
                 {% for option in notification_options %}
                     <option value="{{ option.0 }}" {% if search.notification == option.0 %}selected{% endif %}>{{ option.1 }}</option>
                 {% endfor %}
             </select>
         </td>
         <td>
-            <input  {% if search.notify_on_update %}checked{% endif %} type="checkbox" name="notify-updates-{{ search.id }}" id="notify-updates-{{ search.id }}"><label for="notify-updates-{{ search.id }}">Notify on update</label>
+            <input onchange="removeChangeNotification()"  {% if search.notify_on_update %}checked{% endif %} type="checkbox" name="notify-updates-{{ search.id }}" id="notify-updates-{{ search.id }}"><label for="notify-updates-{{ search.id }}">Notify on update</label>
         </td>
         <td>
-            <input type="checkbox" name="delete-{{ search.id }}" id="delete-{{ search.id }}"><label for="delete-{{ search.id }}">Delete</label>
+            <input onchange="removeChangeNotification()"  type="checkbox" name="delete-{{ search.id }}" id="delete-{{ search.id }}"><label for="delete-{{ search.id }}">Delete</label>
         </td>
     </tr>
     {% endfor %}
