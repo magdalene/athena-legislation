@@ -56,6 +56,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
+    'legislation_models',
+    'frontend',
+
     'allauth',
     'allauth.account',
     # TODO: add these
@@ -122,8 +126,6 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.windowslive',
     # 'allauth.socialaccount.providers.xing',
 
-    'legislation_models',
-    'frontend'
 ]
 
 MIDDLEWARE = [

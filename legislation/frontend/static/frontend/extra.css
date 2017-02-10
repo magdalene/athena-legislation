@@ -13,6 +13,37 @@ em {
     font-style: normal;
 }
 
+.secondaryAction {
+    padding-right: 15px;
+    vertical-align: -40%;
+}
+
+.remember-me-container {
+    padding-bottom: 10px;
+}
+
+
+.signin-header {
+    padding-bottom: 15px;
+    color: #898989;
+}
+
+
+.login-panel {
+    margin-top: 10%;
+    max-width: 450px;
+    width: 50%;
+    min-width: 200px;
+    padding: 50px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.login-panel label {
+    padding-left: 8px;
+}
+
+
 .save-search-link {
     padding-left: 15px;
 }
