@@ -231,4 +231,8 @@ LOGIN_REDIRECT_URL = '/legis/'
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+ACCOUNT_EMAIL_REQUIRED = True
+
 DEFAULT_FROM_EMAIL = 'noreply@godsigma.zolnetwork.com'
