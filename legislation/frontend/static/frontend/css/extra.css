@@ -28,6 +28,17 @@ h1 {
     color: #898989;
 }
 
+.glyphicon-user {
+    padding-right: 15px;
+    padding-top: 4px;
+}
+.glyphicon-user:hover {
+    text-decoration: none;
+}
+
+.dropdown-menu p {
+    padding-left: 10px;
+}
 
 .login-panel {
     margin-top: 10%;
