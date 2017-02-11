@@ -191,7 +191,7 @@ def contact(request):
         msg = MIMEText(msg_text)
         msg['Subject'] = subject
         msg['From'] = 'athena@zolnetwork.com'
-        msg['To'] = 'shockley@zolnetwork.com'
+        msg['To'] = 'shockley@dshockley.com'
         s = smtplib.SMTP(EMAIL_SERVER)
         s.send_message(msg)
         s.quit()
