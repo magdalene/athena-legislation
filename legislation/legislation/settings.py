@@ -29,7 +29,8 @@ DB_NAME = config_params.get('DB_NAME', 'legislation')
 DB_USER = config_params.get('DB_USER', 'shockley')
 DB_PASSWORD = config_params.get('DB_PASSWORD', '')
 
-EMAIL_SERVER = config_params.get('EMAIL_SERVER', '192.168.99.1')
+EMAIL_SERVER = config_params.get('EMAIL_SERVER', 'localhost')
+EMAIL_HOST = EMAIL_SERVER
 
 ALLOWED_HOSTS = [host for host in config_params.get('ALLOWED_HOSTS', '').split(',') if len(host)]
 
@@ -227,3 +228,4 @@ STATIC_URL = '/static/'
 SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/legis/'
+
