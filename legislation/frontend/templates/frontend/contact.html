@@ -3,8 +3,18 @@
 <!doctype html>
 
 <html lang="en">
+{% load static %}
 <head>
-    {% include "frontend/header.html" %}
+ <meta charset="utf-8">
+
+    <title>Athena</title>
+    <meta name="description" content="Legislation search and notification for activists">
+    <meta name="author" content="Darla Magdalene Shockley">
+<link rel='shortcut icon' type='image/x-icon' href='{% static "frontend/favicon.ico" %}' />
+<link rel="stylesheet" href="{% static "frontend/css/bootstrap.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "frontend/css/extra.css" %}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- TODO: this should include the header, but it doesn't work because bootstrap js breaks shit -->
 </head>
 
 <body>
