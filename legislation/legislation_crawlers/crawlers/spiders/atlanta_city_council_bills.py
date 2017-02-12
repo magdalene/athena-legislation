@@ -17,7 +17,9 @@ ATLANTA_CITY_COUNCIL = LegislativeBody.objects.get(place=ATLANTA)
 
 class AlantaCityCouncilOrdinanceSpider(CrawlSpider):
     name = "atlanta_bills"
-    start_urls = [bill.link for bill in Bill.objects.filter(status=Bill.STATUS_NEEDS_UPDATE) if bill.link is not None]
+    start_urls = [bill.link
+                  for bill in Bill.objects.filter(status=Bill.STATUS_NEEDS_UPDATE, legislative_body=ATLANTA_CITY_COUNCIL)
+                  if bill.link is not None]
 
     def parse(self, response):
         bill_type = response.css('#ContentPlaceholder1_lblLegiFileType')[0].xpath('text()').extract()[0]
