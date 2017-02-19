@@ -13,7 +13,11 @@
 
     <table class="table">
         <tr>
-            <td>Number</td><td><a target="_blank" href="{{ bill.link }}">{{ bill.number }}</a></td>
+            <td>Number</td><td>
+            {% if bill.link %}<a target="_blank" href="{{ bill.link }}">{% endif %}
+                {{ bill.number }}
+            {% if bill.link %}</a>{% endif %}
+        </td>
         </tr><tr>    <td>Legislative Body</td><td>{{ bill.legislative_body.name }} ({{ bill.legislative_body.city }}, {{ bill.legislative_body.state }})</td>
         </tr><tr>    <td>Sponsors</td><td>{% if bill.sponsors %}{% for sponsor in bill.sponsors %}
             {{ sponsor.name }} ({{ sponsor.sponsor_type }}, {{ sponsor.district }}),
