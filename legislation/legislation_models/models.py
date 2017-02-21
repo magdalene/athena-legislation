@@ -80,6 +80,7 @@ class Bill(models.Model):
     text = models.TextField(null=True)
     summary = models.TextField(null=True)
     link = models.CharField(max_length=1024, null=True)
+    full_text_link = models.CharField(max_length=1024, null=True)
     status = models.CharField(max_length=3,
                               choices=((STATUS_NEEDS_UPDATE, 'Needs Update'),
                                        (STATUS_UP_TO_DATE, 'Up-to-date')),
