@@ -29,6 +29,7 @@ def urls():
     global min_got_404
     for bill_type in min_got_404.keys():
         for n in range(0, 100000):
+            print('trying %s, %s' % (bill_type, n))
             if min_got_404[bill_type] < n:
                 break
             yield BILL_URL_FORMAT % {'bill_type': bill_type, 'number': n}
@@ -46,7 +47,9 @@ class GeorgiaLegislatureBillsSpider(CrawlSpider):
         bill_type = split_url[-2]
         bill_number = int(split_url[-1])
         error = response.xpath(".//div[contains(@class, 'ggaError')]//text()").extract()
+        print('checking %s, %s' % (bill_type, bill_number))
         if len(error) and 'Error Returning Legislation Search Results' in error[0]:
+            print ('got error: ', error)
             if min_got_404[bill_type] > bill_number:
                 min_got_404[bill_type] = bill_number
             return
