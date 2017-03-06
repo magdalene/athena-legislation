@@ -27,6 +27,12 @@ class AlantaCityCouncilOrdinanceSpider(CrawlSpider):
         summary = response.css('#ContentPlaceholder1_lblLegiFileTitle')[0].xpath('text()').extract()[0]
         text_paragraphs = response.css('#divBody .LegiFileSectionContents p')
         text_paragraph_texts = [''.join(p.xpath('.//text()').extract()).strip() for p in text_paragraphs]
+        sponsor_texts = response.xpath(".//tr/th[contains(., 'Sponsors')]/following-sibling::td//text()").extract()
+        sponsors = []
+        if len(sponsor_texts):
+            sponsor_text = sponsor_texts[0]
+            sponsors = ['Councilmember' + name for name in sponsor_text.split('Councilmember')[1:]]
+            sponsors = [s.strip(', ') for s in sponsors]
         text = '\n\n'.join([p for p in text_paragraph_texts if len(p)])
         link = response.url
         # TODO: history
@@ -38,3 +44,8 @@ class AlantaCityCouncilOrdinanceSpider(CrawlSpider):
         bill.text = text
         bill.status = Bill.STATUS_UP_TO_DATE
         bill.save()
+        for sponsor_name in sponsors:
+            sponsor, created = Sponsor.objects.get_or_create(name_string=sponsor_name, bill=bill)
+            if created:
+                sponsor.sponsor_type = Sponsor.SPONSOR
+                sponsor.save()

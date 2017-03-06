@@ -59,7 +59,7 @@ class Legislator(models.Model):
 class Sponsor(models.Model):
     SPONSOR = 'SP'
     COSPONSOR = 'CO'
-    legislator = models.ForeignKey('Legislator')
+    legislator = models.ForeignKey('Legislator', null=True)
     name_string = models.CharField(max_length=256, null=False)
     bill = models.ForeignKey('Bill', null=False)
     sponsor_type = models.CharField(max_length=2, choices=((SPONSOR, 'Sponsor'), (COSPONSOR, 'Co-sponsor')), null=False)
