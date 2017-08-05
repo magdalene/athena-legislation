@@ -44,8 +44,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!=i11n)e#zvm3$%2&gv1*cj23mc0c*e46dl+or#e6!7p%x_3k5'
+# In production the secret key should be in the config, otherwise we use the random one django generated for us
+SECRET_KEY = config_params.get('SECRET_KEY', '!=i11n)e#zvm3$%2&gv1*cj23mc0c*e46dl+or#e6!7p%x_3k5')
 
 # Application definition
 
