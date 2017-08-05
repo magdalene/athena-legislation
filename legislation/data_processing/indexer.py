@@ -6,7 +6,7 @@ import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legislation.settings")
 django.setup()
-from legislation_models.models import Bill, Place, City, State
+from legislation_models.models import Bill, City, State
 
 from elasticsearch import Elasticsearch, helpers
 
