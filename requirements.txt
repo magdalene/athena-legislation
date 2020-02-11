@@ -4,7 +4,7 @@ constantly==15.1.0
 cryptography==1.7
 cssselect==1.0.0
 defusedxml==0.4.1
-Django==1.10.4
+Django==1.11.28
 django-allauth==0.30.0
 elasticsearch==5.1.0
 elasticsearch-dsl==5.1.0
