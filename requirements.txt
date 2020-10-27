@@ -1,7 +1,7 @@
 attrs==16.3.0
 cffi==1.9.1
 constantly==15.1.0
-cryptography==1.7
+cryptography==3.2
 cssselect==1.0.0
 defusedxml==0.4.1
 Django==1.10.4
